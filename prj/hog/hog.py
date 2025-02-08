@@ -87,7 +87,7 @@ def simple_update(num_rolls, player_score, opponent_score, dice=six_sided):
     PLAYER_SCORE and then rolls NUM_ROLLS DICE, ignoring Sus Fuss.
     """
     score = player_score + take_turn(num_rolls, player_score, opponent_score, dice)
-
+    
     return score
 
 
@@ -226,7 +226,10 @@ def always_roll(n):
     """
     assert n >= 0 and n <= 10
     # BEGIN PROBLEM 6
-
+    def strategy(score, opponent_score):
+        return n
+    
+    return strategy
     # END PROBLEM 6
 
 
@@ -258,7 +261,12 @@ def is_always_roll(strategy, goal=GOAL):
     False
     """
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+    num_dice_to_roll = strategy(0, 0)
+    for i in range(0, goal):
+        for j in range(0, goal):
+            if strategy(i, j) != num_dice_to_roll:
+                return False
+    return True
     # END PROBLEM 7
 
 
@@ -274,7 +282,12 @@ def make_averaged(original_function, samples_count=1000):
     3.0
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def averaged(*args):
+        total = 0
+        for i in range(0, samples_count):
+            total += original_function(*args)
+        return total / samples_count
+    return averaged
     # END PROBLEM 8
 
 
