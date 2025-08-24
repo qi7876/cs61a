@@ -1,3 +1,5 @@
+from unittest import result
+
 
 def composite_identity(f, g):
     """
@@ -14,6 +16,12 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
+    def judge(x):
+        if f(g(x)) == g(f(x)):
+            return True
+        else:
+            return False
+    return judge
 
 
 def sum_digits(y):
@@ -60,6 +68,15 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def count(N):
+        counter = 0
+        for i in range(N):
+            j = i + 1
+            if condition(N, j):
+                counter += 1
+
+        print(counter)
+    return count
 
 
 def multiple(a, b):
@@ -71,7 +88,15 @@ def multiple(a, b):
     42
     """
     "*** YOUR CODE HERE ***"
+    A = a
+    B = b
+    while a != 0 and b != 0:
+        a, b = b, a % b    
+    greatest_common_divisor = a + b
 
+    least_common_multiple = A * B / greatest_common_divisor
+
+    return int(least_common_multiple)
 
 
 def cycle(f1, f2, f3):
@@ -101,4 +126,15 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
-
+    def define_cycles(turns):
+        def calculate(N):
+            for i in range(turns):
+                if i % 3 == 0:
+                    N = f1(N)
+                elif i % 3 == 1:
+                    N = f2(N)
+                elif i % 3 == 2:
+                    N = f3(N)
+            print(N)
+        return calculate
+    return define_cycles
