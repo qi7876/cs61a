@@ -35,7 +35,7 @@ def lower(s):
     """
     return s.lower()
 
-def split(s):
+def split(s: str) -> list[str]:
     """Return a list of words contained in s, which are sequences of characters
     separated by whitespace (spaces, tabs, etc.).
 
