@@ -1,6 +1,9 @@
 .ok*
 __pycache__
 .DS_Store
+libs
+static
+templates
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
