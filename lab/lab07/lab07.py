@@ -1,3 +1,7 @@
+from ast import While
+from typing import override
+
+
 class Account:
     """An account has a balance and a holder.
 
@@ -40,6 +44,12 @@ class Account:
         """Return the number of years until balance would grow to amount."""
         assert self.balance > 0 and amount > 0 and self.interest > 0
         "*** YOUR CODE HERE ***"
+        curr_balance = self.balance
+        time = 0
+        while curr_balance < amount:
+            curr_balance *= 1 + self.interest
+            time += 1
+        return time
 
 
 class FreeChecking(Account):
@@ -70,6 +80,16 @@ class FreeChecking(Account):
     free_withdrawals = 2
 
     "*** YOUR CODE HERE ***"
+    @override
+    def withdraw(self, amount):
+        if self.free_withdrawals > 0:
+            self.free_withdrawals -= 1
+            return super().withdraw(amount)
+        else:
+            if amount + self.withdraw_fee > self.balance:
+                return 'Insufficient funds'
+            else:
+                return super().withdraw(amount + 1)
 
 
 def without(s, i):
@@ -86,6 +106,17 @@ def without(s, i):
     True
     """
     "*** YOUR CODE HERE ***"
+    count = 0
+    head = tail = Link(None)
+    while s is not Link.empty:
+        if count != i:
+            tail.rest = Link(s.first)
+            tail = tail.rest
+
+        s = s.rest
+        count += 1
+
+    return head.rest
 
 
 def duplicate_link(s, val):
@@ -105,7 +136,13 @@ def duplicate_link(s, val):
     Link(1, Link(2, Link(2, Link(2, Link(2, Link(3))))))
     """
     "*** YOUR CODE HERE ***"
-
+    while s is not Link.empty:
+        if s.first == val:
+            new_node = Link(val, s.rest)
+            s.rest = new_node
+            s = s.rest.rest
+        else:
+            s = s.rest
 
 class Link:
     """A linked list.
