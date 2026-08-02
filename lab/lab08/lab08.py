@@ -1,4 +1,7 @@
-def cumulative_mul(t):
+from typing import Any, override
+
+
+def cumulative_mul(t: "Tree") -> None:
     """Mutates t so that each node's label becomes the product of its own
     label and all labels in the corresponding subtree rooted at t.
 
@@ -11,10 +14,15 @@ def cumulative_mul(t):
     >>> otherTree
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
-    "*** YOUR CODE HERE ***"
+    new_label = t.label
+    for branch in t.branches:
+        cumulative_mul(branch)
+        new_label *= branch.label
+
+    t.label = new_label
 
 
-def prune_small(t, n):
+def prune_small(t: "Tree", n: int) -> None:
     """Prune the tree mutatively, keeping only the n branches
     of each node with the smallest labels.
 
@@ -31,14 +39,14 @@ def prune_small(t, n):
     >>> t3
     Tree(6, [Tree(1), Tree(3, [Tree(1), Tree(2)])])
     """
-    while ____:
-        largest = max(____, key=____)
+    while len(t.branches) > n:
+        largest = max(t.branches, key=lambda b: b.label)
         t.branches.remove(largest)
     for b in t.branches:
-        ____
+        prune_small(b, n)
 
 
-def delete(t, x):
+def delete(t: "Tree", x: int):
     """Remove all nodes labeled x below the root within Tree t. When a non-leaf
     node is deleted, the deleted node's children become children of its parent.
 
@@ -57,14 +65,14 @@ def delete(t, x):
     >>> t
     Tree(1, [Tree(4), Tree(5), Tree(3, [Tree(6)]), Tree(6), Tree(7), Tree(8), Tree(4)])
     """
-    new_branches = []
-    for _________ in ________________:
-        _______________________
+    new_branches: list["Tree"] = []
+    for b in t.branches:
+        delete(b, x)
         if b.label == x:
-            __________________________________
+            new_branches += b.branches
         else:
-            __________________________________
-    t.branches = ___________________
+            new_branches.append(b)
+    t.branches = new_branches
 
 
 def max_path_sum(t):
@@ -88,29 +96,33 @@ class Tree:
     >>> t.branches[1].is_leaf()
     True
     """
-    def __init__(self, label, branches=[]):
-        self.label = label
+
+    def __init__(self, label: int, branches: list["Tree"] | None = None) -> None:
+        if branches is None:
+            branches: list[Tree] = []
+        self.label: int = label
         for branch in branches:
             assert isinstance(branch, Tree)
-        self.branches = list(branches)
+        self.branches: list[Tree] = branches
 
-    def is_leaf(self):
+    def is_leaf(self) -> bool:
         return not self.branches
 
-    def __repr__(self):
+    @override
+    def __repr__(self) -> str:
         if self.branches:
-            branch_str = ', ' + repr(self.branches)
+            branch_str = ", " + repr(self.branches)
         else:
-            branch_str = ''
-        return 'Tree({0}{1})'.format(repr(self.label), branch_str)
+            branch_str = ""
+        return "Tree({0}{1})".format(repr(self.label), branch_str)
 
-    def __str__(self):
-        return '\n'.join(self.indented())
+    @override
+    def __str__(self) -> str:
+        return "\n".join(self.indented())
 
-    def indented(self):
+    def indented(self) -> list[str]:
         lines = []
         for b in self.branches:
             for line in b.indented():
-                lines.append('  ' + line)
+                lines.append("  " + line)
         return [str(self.label)] + lines
-
